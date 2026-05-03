@@ -1,8 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
-import { fetchTransactions } from './transactionsSlice';
-import { fetchCryptoPrices } from './portfolioSlice';
-import { fetchRates } from './currencySlice';
-import type { AppDispatch, RootState } from '../store';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
   id: string;
@@ -27,11 +23,10 @@ const initialState: AuthState = {
 // Mock login thunk - simulates API call
 export const login = createAsyncThunk<
   User,
-  { email: string; password: string },
-  { dispatch: AppDispatch }
+  { email: string; password: string }
 >(
   'auth/login',
-  async ({ email, password }, { dispatch }) => {
+  async ({ email, password }) => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -46,14 +41,9 @@ export const login = createAsyncThunk<
       name: email.split('@')[0],
     };
 
-    // FEATURE 01: Dispatch data fetching directly from the authentication workflow natively
-    // (Resolves requirement to avoid initialization dispatches inside the View layer)
-    const appDispatch = dispatch as ThunkDispatch<RootState, unknown, UnknownAction>;
-    await Promise.all([
-      appDispatch(fetchTransactions(user.id)),
-      appDispatch(fetchCryptoPrices()),
-      appDispatch(fetchRates('USD')),
-    ]);
+    // FEATURE 01: Data hydration (fetchTransactions, fetchCryptoPrices, fetchRates)
+    // is handled by listenerMiddleware on login.fulfilled — not dispatched here.
+    // This keeps the thunk focused on authentication only.
 
     return user;
   }

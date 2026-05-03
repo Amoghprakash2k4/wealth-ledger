@@ -1,8 +1,8 @@
-import { Middleware } from '@reduxjs/toolkit';
+import { Middleware, UnknownAction } from '@reduxjs/toolkit';
 
 // Middleware to persist selected currency to localStorage
 export const currencyPersistenceMiddleware: Middleware =
-  (store) => (next) => (action: any) => {
+  (store) => (next) => (action: UnknownAction) => {
     const result = next(action);
 
     // After every action, check if currency changed

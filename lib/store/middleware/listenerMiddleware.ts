@@ -1,9 +1,30 @@
-import { createListenerMiddleware, addListener } from '@reduxjs/toolkit';
+import { createListenerMiddleware, addListener, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { addNotification } from '../slices/notificationsSlice';
 import { fetchTransactions } from '../slices/transactionsSlice';
+import { fetchCryptoPrices } from '../slices/portfolioSlice';
+import { fetchRates } from '../slices/currencySlice';
+import { login } from '../slices/authSlice';
 
 export const listenerMiddleware = createListenerMiddleware();
+
+// FEATURE 01: On login.fulfilled → dispatch data-fetching thunks
+// This is the RTK-idiomatic alternative to dispatching from extraReducers
+// (reducers must be pure; side-effect orchestration belongs in listenerMiddleware)
+listenerMiddleware.startListening({
+  actionCreator: login.fulfilled,
+  effect: async (action, listenerApi) => {
+    const appDispatch = listenerApi.dispatch as ThunkDispatch<RootState, unknown, UnknownAction>;
+    const userId = action.payload.id;
+
+    // Fetch all initial dashboard data in parallel
+    await Promise.all([
+      appDispatch(fetchTransactions(userId)),
+      appDispatch(fetchCryptoPrices()),
+      appDispatch(fetchRates('USD')),
+    ]);
+  },
+});
 
 // FEATURE 06: Budget alert listener
 // This listens to transaction updates and fires notifications when budget is exceeded

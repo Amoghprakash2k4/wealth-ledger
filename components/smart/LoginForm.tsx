@@ -3,9 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/redux';
 import { login } from '@/lib/store/slices/authSlice';
-import { fetchTransactions } from '@/lib/store/slices/transactionsSlice';
-import { fetchCryptoPrices } from '@/lib/store/slices/portfolioSlice';
-import { fetchRates } from '@/lib/store/slices/currencySlice';
 import { useRouter } from 'next/navigation';
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/lib/store/store';
@@ -32,7 +29,6 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // @ts-expect-error - RTK generic inference issue with async thunks in React components
       await dispatch(login({ email, password })).unwrap();
       router.push('/dashboard');
     } catch (err) {
