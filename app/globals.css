@@ -1,0 +1,323 @@
+@import "tailwindcss";
+
+:root {
+  --bg-base: #0d0f14;
+  --bg-surface: #151821;
+  --bg-elevated: #1c2030;
+  --bg-card: #1a1e2e;
+  --accent-primary: #6366f1;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #a78bfa;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-amber: #f59e0b;
+  --accent-blue: #3b82f6;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #252a3d;
+  --border-bright: #2d3452;
+  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.15);
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Surface / background colors */
+  --color-bg-base: #0d0f14;
+  --color-bg-surface: #151821;
+  --color-bg-elevated: #1c2030;
+  --color-bg-card: #1a1e2e;
+
+  /* Accent palette */
+  --color-accent-primary: #6366f1;
+  --color-accent-secondary: #8b5cf6;
+  --color-accent-tertiary: #a78bfa;
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
+  --color-accent-amber: #f59e0b;
+  --color-accent-blue: #3b82f6;
+  --color-accent-pink: #ec4899;
+
+  /* Text colors */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  /* Border colors */
+  --color-border-default: #252a3d;
+  --color-border-bright: #2d3452;
+
+  /* Semantic / state colors with opacity variants */
+  --color-green-glow: rgba(16,185,129,0.08);
+  --color-green-border: rgba(16,185,129,0.2);
+  --color-green-border-strong: rgba(16,185,129,0.25);
+  --color-green-bg: rgba(16,185,129,0.1);
+  --color-green-bg-12: rgba(16,185,129,0.12);
+
+  --color-red-glow: rgba(239,68,68,0.08);
+  --color-red-border: rgba(239,68,68,0.2);
+  --color-red-border-strong: rgba(239,68,68,0.25);
+  --color-red-bg: rgba(239,68,68,0.1);
+  --color-red-bg-12: rgba(239,68,68,0.12);
+
+  --color-amber-glow: rgba(245,158,11,0.08);
+  --color-amber-border: rgba(245,158,11,0.2);
+
+  --color-indigo-glow: rgba(99,102,241,0.08);
+  --color-indigo-glow-15: rgba(99,102,241,0.15);
+  --color-indigo-glow-12: rgba(99,102,241,0.12);
+  --color-indigo-border: rgba(99,102,241,0.2);
+  --color-indigo-border-strong: rgba(99,102,241,0.3);
+  --color-indigo-bg: rgba(99,102,241,0.2);
+  --color-indigo-shadow: rgba(99,102,241,0.4);
+  --color-indigo-shadow-50: rgba(99,102,241,0.5);
+
+  --color-violet-glow: rgba(139,92,246,0.08);
+  --color-violet-glow-12: rgba(139,92,246,0.12);
+  --color-violet-bg: rgba(139,92,246,0.1);
+  --color-violet-text: rgba(167,139,250,0.8);
+
+  --color-pink-glow: rgba(236,72,153,0.12);
+
+  --color-orange-glow: rgba(249,115,22,0.12);
+  --color-orange-glow-30: rgba(249,115,22,0.3);
+  --color-blue-glow: rgba(59,130,246,0.12);
+  --color-blue-glow-30: rgba(59,130,246,0.3);
+  --color-green-glow-30: rgba(16,185,129,0.3);
+  --color-indigo-glow-30: rgba(99,102,241,0.3);
+  --color-violet-glow-30: rgba(139,92,246,0.3);
+
+  --color-white-5: rgba(255,255,255,0.05);
+  --color-white-8: rgba(255,255,255,0.08);
+  --color-slate-muted: rgba(148,163,184,0.7);
+  --color-slate-bg: rgba(148,163,184,0.12);
+
+  /* Shadows */
+  --shadow-glow-indigo: 0 0 30px rgba(99,102,241,0.15);
+  --shadow-glow-indigo-lg: 0 0 40px rgba(99,102,241,0.12);
+  --shadow-btn-indigo: 0 0 20px rgba(99,102,241,0.4);
+  --shadow-logo-indigo: 0 0 24px rgba(99,102,241,0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans, "Inter", system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 3px;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(21, 24, 33, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #a78bfa, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card base */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* Glow effect */
+.glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Animated gradient border */
+@keyframes borderSpin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-border {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
+  background-size: 300% 300%;
+  animation: borderSpin 3s ease infinite;
+}
+
+/* Loading pulse dark variant */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 25%,
+    var(--border-bright) 50%,
+    var(--bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Number counter animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+/* Ticker green/red */
+.tick-up { color: var(--accent-green); }
+.tick-down { color: var(--accent-red); }
+
+/* Gradient utilities for backgrounds that can't be expressed as single colors */
+.bg-gradient-login { background: linear-gradient(135deg, #0d0f14 0%, #111827 50%, #0d0f14 100%); }
+.bg-gradient-card-login { background: linear-gradient(145deg, #1a1e2e, #151821); }
+.bg-gradient-networth { background: linear-gradient(135deg, #1e1b4b 0%, #1a1e2e 60%, #0f172a 100%); }
+.bg-gradient-indigo { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.bg-gradient-btn-disabled { background: var(--bg-elevated); }
+
+/* Gradient bar utilities */
+.bg-gradient-bar-green { background: linear-gradient(90deg, #10b981, #34d399); }
+.bg-gradient-bar-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+.bg-gradient-bar-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.bg-gradient-bar-orange { background: linear-gradient(90deg, #f97316, #fb923c); }
+.bg-gradient-bar-blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.bg-gradient-bar-violet { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.bg-gradient-bar-pink { background: linear-gradient(90deg, #ec4899, #f472b6); }
+.bg-gradient-bar-slate { background: linear-gradient(90deg, #64748b, #94a3b8); }
+
+/* Conic spin for logo */
+.bg-conic-spin {
+  background: conic-gradient(from 0deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
+}
+
+/* Gradient ring */
+.bg-gradient-ring {
+  background: linear-gradient(135deg, rgba(99,102,241,0.6), rgba(139,92,246,0.4), rgba(99,102,241,0.6));
+}
+
+/* Radial glow orbs */
+.bg-radial-indigo { background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%); }
+.bg-radial-violet { background: radial-gradient(circle, rgba(139,92,246,0.10) 0%, transparent 70%); }
+.bg-radial-violet-18 { background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%); }
+
+/* LoginForm animations */
+@keyframes float-0 { 0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);} }
+@keyframes float-1 { 0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);} }
+@keyframes float-2 { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
+@keyframes spin-slow { from{transform:rotate(0deg);}to{transform:rotate(360deg);} }
+@keyframes pulse-ring { 0%,100%{opacity:0.6;transform:scale(1);}50%{opacity:1;transform:scale(1.03);} }
+
+.animate-float-0 { animation: float-0 4s ease-in-out infinite; }
+.animate-float-1 { animation: float-1 5s ease-in-out infinite; }
+.animate-float-2 { animation: float-2 6s ease-in-out infinite; }
+.animate-float-3 { animation: float-0 7s ease-in-out infinite; }
+.animate-float-4 { animation: float-1 8s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 4s linear infinite; }
+.animate-pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
+
+/* Mask for spinning ring */
+.mask-ring {
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 0);
+}
+
+/* Input focus styling */
+.input-field {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  caret-color: var(--accent-primary);
+}
+.input-field:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+
+/* Error banner */
+.error-banner {
+  background: rgba(239,68,68,0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.25);
+}
+
+/* Error message light */
+.error-message {
+  background: rgba(239,68,68,0.1);
+  color: var(--accent-red);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+/* Currency button active */
+.currency-btn-active {
+  background: var(--accent-primary);
+  color: white;
+  border: 1px solid var(--accent-primary);
+  box-shadow: 0 0 12px rgba(99,102,241,0.4);
+}
+.currency-btn-inactive {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+/* Select field */
+.select-field {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border-left: 1px solid var(--border);
+}
+
+/* FX swap button */
+.fx-swap-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+/* Rate cell */
+.rate-cell {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+/* Notification type utilities */
+.notif-success { background: rgba(16,185,129,0.08); border-color: #10b981; }
+.notif-warning { background: rgba(245,158,11,0.08); border-color: #f59e0b; }
+.notif-error { background: rgba(239,68,68,0.08); border-color: #ef4444; }
+.notif-info { background: rgba(99,102,241,0.08); border-color: #6366f1; }
+.notif-read { background: transparent; border-color: var(--border); }
