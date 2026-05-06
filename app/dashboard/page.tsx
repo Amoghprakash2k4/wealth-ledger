@@ -10,27 +10,25 @@ import { CryptoPortfolio } from '@/components/smart/CryptoPortfolio';
 import { TransactionsList } from '@/components/smart/TransactionsList';
 import { SpendingInsights } from '@/components/smart/SpendingInsights';
 import { CurrencyConverter } from '@/components/smart/CurrencyConverter';
-import { RecentAlerts } from '@/components/smart/RecentAlerts';
+import { NotificationDropdown } from '@/components/smart/NotificationDropdown';
+import { ToastProvider } from '@/components/smart/ToastProvider';
 
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/lib/store/store';
+
+type Tab = 'overview' | 'portfolio' | 'spending' | 'tools';
 
 export default function DashboardPage() {
   const router = useRouter();
   const dispatch = useAppDispatch() as ThunkDispatch<RootState, unknown, UnknownAction>;
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const unreadCount = useAppSelector((state) => state.notifications.unreadCount);
-  const [showNotifBadge, setShowNotifBadge] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/');
     }
   }, [isAuthenticated, router]);
-
-  useEffect(() => {
-    setShowNotifBadge(unreadCount > 0);
-  }, [unreadCount]);
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -55,6 +53,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg-base)' }}>
+      <ToastProvider />
       {/* Top navigation bar */}
       <header
         className="sticky top-0 z-40 border-b"
@@ -74,23 +73,7 @@ export default function DashboardPage() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            {/* Notifications bell */}
-            <button
-              onClick={() => { dispatch(markAllAsRead()); setShowNotifBadge(false); }}
-              className="relative w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}
-              title="Mark all as read"
-            >
-              <span className="text-base">🔔</span>
-              {showNotifBadge && (
-                <span
-                  className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
-                  style={{ background: '#ef4444' }}
-                >
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
+            <NotificationDropdown />
 
             {/* User avatar */}
             <div className="flex items-center gap-2">
@@ -134,33 +117,68 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* FEATURE 05: Net Worth Dashboard */}
-        <section>
-          <NetWorthDashboard />
-        </section>
-
-        {/* Two-column: Crypto + Spending */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* FEATURE 03: Crypto Portfolio */}
-          <section>
-            <CryptoPortfolio />
-          </section>
-
-          {/* FEATURE 06: Spending Insights */}
-          <section>
-            <SpendingInsights />
-          </section>
+        {/* Tab Navigation */}
+        <div className="flex space-x-2 border-b border-[color:var(--border)] pb-px overflow-x-auto hide-scrollbar">
+          {(
+            [
+              { id: 'overview', label: 'Net Worth', icon: '💰' },
+              { id: 'portfolio', label: 'Crypto Portfolio', icon: '📈' },
+              { id: 'spending', label: 'Expenditure', icon: '💸' },
+              { id: 'tools', label: 'Currency Converter', icon: '🛠️' },
+            ] as const
+          ).map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as Tab)}
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'border-indigo-500 text-white'
+                  : 'border-transparent text-[color:var(--text-muted)] hover:text-white hover:border-[color:var(--border)]'
+              }`}
+            >
+              <span>{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* FEATURE 04: Currency Converter */}
-        <section>
-          <CurrencyConverter />
-        </section>
+        {/* Tab Content */}
+        <div className="mt-6">
+          {activeTab === 'overview' && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <section>
+                <NetWorthDashboard />
+              </section>
+            </div>
+          )}
 
-        {/* FEATURE 02: Transaction Feed */}
-        <section>
-          <TransactionsList />
-        </section>
+          {activeTab === 'portfolio' && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <section>
+                <CryptoPortfolio />
+              </section>
+            </div>
+          )}
+
+          {activeTab === 'spending' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <section>
+                <SpendingInsights />
+              </section>
+              <section>
+                <TransactionsList />
+              </section>
+            </div>
+          )}
+
+          {activeTab === 'tools' && (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <section>
+                <CurrencyConverter />
+              </section>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

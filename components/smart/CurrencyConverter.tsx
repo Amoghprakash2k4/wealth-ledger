@@ -22,7 +22,7 @@ import { CurrencyConverterLayout } from '../dumb/CurrencyConverterLayout';
  * - No derived state in component — all calculations in createSelector
  * - Dispatches setSelectedCurrency → currencySlice + portfolioSlice react (cross-slice)
  * - fetchRates thunk → currencySlice + portfolioSlice via extraReducers (cross-slice)
- * - Preferred currency persists in localStorage via currencyPersistenceMiddleware
+ * - Preferred currency persists across sessions via redux-persist
  * - Layout delegated to CurrencyConverterLayout dumb component
  */
 export function CurrencyConverter() {

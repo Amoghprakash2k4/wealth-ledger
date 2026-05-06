@@ -15,9 +15,7 @@ interface CurrencyState {
 }
 
 const initialState: CurrencyState = {
-  selectedCurrency: typeof window !== 'undefined' 
-    ? localStorage.getItem('preferredCurrency') || 'USD'
-    : 'USD',
+  selectedCurrency: 'USD',
   rates: null,
   loading: false,
   error: null,
@@ -51,7 +49,6 @@ const currencySlice = createSlice({
   reducers: {
     setSelectedCurrency: (state, action: PayloadAction<string>) => {
       state.selectedCurrency = action.payload;
-      // Middleware will persist to localStorage
     },
   },
   extraReducers: (builder) => {

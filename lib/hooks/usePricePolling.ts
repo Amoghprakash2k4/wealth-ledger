@@ -15,6 +15,8 @@ import type { RootState } from '@/lib/store/store';
 export function usePricePolling(intervalSeconds: number = 60, enabled: boolean = true) {
   const dispatch = useAppDispatch() as ThunkDispatch<RootState, unknown, UnknownAction>;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasCryptoPrices = useAppSelector((state) => Object.keys(state.portfolio.cryptoPrices).length > 0);
+  const hasRates = useAppSelector((state) => state.currency.rates !== null);
 
   useEffect(() => {
     if (!enabled) {
@@ -26,9 +28,14 @@ export function usePricePolling(intervalSeconds: number = 60, enabled: boolean =
       return;
     }
 
-    // Initial fetch
-    dispatch(fetchCryptoPrices());
-    dispatch(fetchRates('USD'));
+    // Skip initial fetch if we already have persisted data (from redux-persist).
+    // The interval will still refresh prices every 60s.
+    if (!hasCryptoPrices) {
+      dispatch(fetchCryptoPrices());
+    }
+    if (!hasRates) {
+      dispatch(fetchRates('USD'));
+    }
 
     // Set up polling interval
     intervalRef.current = setInterval(() => {
@@ -43,5 +50,5 @@ export function usePricePolling(intervalSeconds: number = 60, enabled: boolean =
         intervalRef.current = null;
       }
     };
-  }, [dispatch, intervalSeconds, enabled]);
+  }, [dispatch, intervalSeconds, enabled]); // intentionally exclude hasCryptoPrices/hasRates to avoid re-triggering
 }

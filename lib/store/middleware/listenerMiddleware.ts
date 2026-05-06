@@ -4,7 +4,7 @@ import { addNotification } from '../slices/notificationsSlice';
 import { fetchTransactions } from '../slices/transactionsSlice';
 import { fetchCryptoPrices } from '../slices/portfolioSlice';
 import { fetchRates } from '../slices/currencySlice';
-import { login } from '../slices/authSlice';
+import { login, logout } from '../slices/authSlice';
 
 export const listenerMiddleware = createListenerMiddleware();
 
@@ -75,6 +75,17 @@ listenerMiddleware.startListening({
   },
 });
 
+// PERSISTENCE: On logout → purge persisted storage
+// Lazy import of persistor avoids circular dependency (store ↔ listenerMiddleware)
+listenerMiddleware.startListening({
+  actionCreator: logout.fulfilled,
+  effect: async () => {
+    const { persistor } = await import('../store');
+    await persistor.purge();
+  },
+});
+
 export type AppStartListening = typeof listenerMiddleware.startListening;
 export const startAppListening = listenerMiddleware.startListening;
 export { addListener };
+
